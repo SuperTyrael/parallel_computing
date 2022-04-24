@@ -12,9 +12,14 @@ Note that:
 
 No. Process:    Mean time (average of 3 runs):    Parallel speed-up, S:    Efficiency, E(%)
 ============    ==============================    =====================    ================
-1                                                          1.0                  100%
+1                                                      1.0                  100%
 2                                      
 4
-8                                     
+8                         0.026214975         
 
 A brief interpretation of these results (2-3 sentences should be enough):
+
+0.0259804 
+0.0262989 
+0.0265828 
+0.0259978

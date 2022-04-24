@@ -89,19 +89,6 @@ int main(int argc, char *argv[])
             {
                 MPI_Recv(x, N, MPI_FLOAT, rank - index, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             }
-            // traverse all received process send to unrecieved ones
-            //  for (int i = 0; i < index; i++){
-            //      //send
-            //      if (rank==i){
-            //          MPI_Send(x, N, MPI_FLOAT, i+index, 0, MPI_COMM_WORLD);
-            //      }
-
-            //     //received
-            //     if (rank==i+index){
-            //         MPI_Recv(x, N, MPI_FLOAT, i, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-            //     }
-
-            // }
         }
     }
     else

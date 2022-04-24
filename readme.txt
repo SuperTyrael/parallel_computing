@@ -12,14 +12,10 @@ Note that:
 
 No. Process:    Mean time (average of 3 runs):    Parallel speed-up, S:    Efficiency, E(%)
 ============    ==============================    =====================    ================
-1                                                      1.0                  100%
-2                                      
-4
-8                         0.026214975         
+1                          0.145081                     0.145081                  100%
+2                     0.036265266666666664              0.145081                  400%
+4                                      No enough slots avaliable on HPC LEEDS
+8                         0.026214975                   0.145081                  553%
 
-A brief interpretation of these results (2-3 sentences should be enough):
-
-0.0259804 
-0.0262989 
-0.0265828 
-0.0259978
+Interpretation:
+Obivously, the parallel methods hugely boost up the running speed of our programme, two processes parallel can brings over 400% efficiency increse, the performance increase exponentially with the growth of the number of parallel processes. However, as the number of processes increases, the improvement of performance shrinks. This phenomenon is mentioned in Lecture 4 that the parallel overheads adversly affect the performance due to the growing burden on communication. 

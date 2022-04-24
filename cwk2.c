@@ -63,8 +63,64 @@ int main(int argc, char *argv[])
     // Perform matrix-vector multiplication in parallel.
     //
 
-    // Your solution should go here.
+    // distribute x to processes in two ways
+    if (numprocs && ((numprocs & (numprocs - 1)) == 0))
+    {
+        // Depth of BTree
+        int lev = 1;
+        int index;
+        while (1 << lev <= numprocs)
+            lev++;
 
+        // Btree
+        for (int layer = 0; layer < lev - 1; layer++)
+        {
+            // index for each layer
+            index = 1 << layer;
+
+            //send
+            if (rank < index)
+            {
+                MPI_Send(x, N, MPI_FLOAT, rank + index, 0, MPI_COMM_WORLD);
+            }
+
+            // receive
+            else if (rank < index << 1)
+            {
+                MPI_Recv(x, N, MPI_FLOAT, rank - index, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            }
+            // traverse all received process send to unrecieved ones
+            //  for (int i = 0; i < index; i++){
+            //      //send
+            //      if (rank==i){
+            //          MPI_Send(x, N, MPI_FLOAT, i+index, 0, MPI_COMM_WORLD);
+            //      }
+
+            //     //received
+            //     if (rank==i+index){
+            //         MPI_Recv(x, N, MPI_FLOAT, i, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            //     }
+
+            // }
+        }
+    }
+    else
+    {
+        // Boradcast x to all processes
+        MPI_Bcast(x, N, MPI_FLOAT, 0, MPI_COMM_WORLD);
+    }
+    MPI_Scatter(A, N * rowsPerProc, MPI_FLOAT, A_perProc, N * rowsPerProc, MPI_FLOAT, 0, MPI_COMM_WORLD);
+
+    // Perform the matrix-vector multiplication
+    for (int row = 0; row < rowsPerProc; row++)
+    {
+        b_perProc[row] = 0.0f;
+        for (int col = 0; col < N; col++)
+            b_perProc[row] += A_perProc[row * N + col] * x[col];
+    }
+
+    // Gather the result back to rank 0
+    MPI_Gather(b_perProc, rowsPerProc, MPI_FLOAT, b, rowsPerProc, MPI_FLOAT, 0, MPI_COMM_WORLD);
     //
     // Check the answer on rank 0 in serial. Also output the result of the timing.
     //
